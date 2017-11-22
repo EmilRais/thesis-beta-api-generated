@@ -20,8 +20,20 @@ describe("operation", () => {
         database.close();
     });
 
+    it("should fail if collection has not been specified", () => {
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: null, host: "localhost" };
+        return prepareOperation(abstractOperation)
+            .then(operation => {
+                (operation as any).database.close();
+                return Promise.reject("Expected failure");
+            })
+            .catch(error => {
+                error.should.equal("mongo-delete-one expected a collection");
+            });
+    });
+
     it("should fail deleting document that does not exist", () => {
-        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", host: "localhost" };
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", host: "localhost" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -46,7 +58,7 @@ describe("operation", () => {
     });
 
     it("should succeed deleting document that does exist", () => {
-        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", host: "localhost" };
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", host: "localhost" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -57,7 +69,7 @@ describe("operation", () => {
                             const runningServer = this;
 
                             const document = { _id: "some-id" };
-                            database.collection("Brands").insert(document).then(() => {
+                            database.collection("items").insert(document).then(() => {
                                 agent.post("localhost:3030/some-id")
                                     .catch(error => error.response)
                                     .then(response => {
