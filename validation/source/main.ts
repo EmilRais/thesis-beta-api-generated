@@ -1,42 +1,22 @@
 import { RequestHandler } from "express";
 import { Rule } from "paradise";
 
-import { BoardRule } from "./board.rule";
-import { FacebookTokenRule } from "./facebook-token.rule";
-import { UserRule } from "./user.rule";
+import { SalesDoNotRelyOnBrandRule } from "./sales-do-not-rely-on-brand.rule";
 
 export interface AbstractOperation {
     module: string;
     schema: Schema;
 }
 
-export interface FacebookToken {
-    is_valid: boolean;
-    app_id: string;
-    expires_at: number;
-    user_id: string;
-}
-
-type Schema = "board" | "user" | "facebook-token";
+type Schema = "sales-don't-rely-on-brand";
 
 function selectStrategy(schema: Schema): RequestHandler {
     return (request, response, next) => {
         switch ( schema ) {
-            case "board":
-                return BoardRule().guard(request.body)
+            case "sales-don't-rely-on-brand":
+                return SalesDoNotRelyOnBrandRule(request.params.id).guard(response.locals.boards)
                     .then(() => next())
-                    .catch(error => response.status(400).json(error));
-
-            case "user":
-                return UserRule().guard(request.body)
-                    .then(() => next()
-                    ).catch(error => response.status(400).json(error));
-
-            case "facebook-token":
-                return FacebookTokenRule(new Date().getTime() / 1000).guard(response.locals.boards)
-                    .then(() => request.body.userId === response.locals.boards.user_id ? Promise.resolve() : Promise.reject("User id mismatch"))
-                    .then(() => next())
-                    .catch(error => response.status(401).end("Ugyldigt Facebook-login"));
+                    .catch(error => response.status(400).end("Brand er i brug hos et udsalg og kan ikke slettes"));
 
             default: throw new Error(`validation could not recognise schema "${schema}"`);
         }

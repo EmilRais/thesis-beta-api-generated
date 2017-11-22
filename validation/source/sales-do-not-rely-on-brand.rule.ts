@@ -1,13 +1,10 @@
-import { All, Array, Boolean, MandatoryFields, NotValue, Number, Object, Required, Size, String } from "paradise";
+import { All, Array, NotValue, OptionalFields } from "paradise";
 
 export const SalesDoNotRelyOnBrandRule = (brandId: string) => {
     return All([
-        Required(),
         Array([
-            Required(),
-            Object(),
-            MandatoryFields({
-                brand: [Required(), NotValue([brandId])]
+            OptionalFields({
+                brand: [NotValue([brandId])]
             })
         ])
     ]);
