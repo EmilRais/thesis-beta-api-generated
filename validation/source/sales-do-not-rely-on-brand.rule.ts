@@ -4,7 +4,9 @@ export const SalesDoNotRelyOnBrandRule = (brandId: string) => {
     return All([
         Array([
             OptionalFields({
-                brand: [NotValue([brandId])]
+                brand: [OptionalFields({
+                    _id: [NotValue([brandId])]
+                })]
             })
         ])
     ]);

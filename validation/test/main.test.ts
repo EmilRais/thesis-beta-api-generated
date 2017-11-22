@@ -11,7 +11,9 @@ import { AbstractOperation, prepareOperation } from "../source/main";
 describe("operation", () => {
 
     it("should reject with 400 if sales contain brand", () => {
-        const sales = [{ name: "some-name", brand: "some-brand" }];
+        const sales = [
+            { name: "some-name", brand: { _id: "some-brand" } }
+        ];
         const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-brand" };
         return prepareOperation(abstractOperation)
             .then(operation => {
@@ -38,7 +40,9 @@ describe("operation", () => {
     });
 
     it("should continue to next operation if sales do not contain brand", () => {
-        const sales = [{ name: "some-name", brand: "some-other-brand" }];
+        const sales = [
+            { name: "some-name", brand: { _id: "some-other-brand" } }
+        ];
         const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-brand" };
         return prepareOperation(abstractOperation)
             .then(operation => {

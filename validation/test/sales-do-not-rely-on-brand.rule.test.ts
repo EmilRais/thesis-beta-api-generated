@@ -13,10 +13,13 @@ describe("SalesDoNotRelyOnBrandRule", () => {
     });
 
     it("should fail if individual sales has the specified brand", () => {
-        const sales: any = [{ brand: "some-other-id" }, { brand: "some-id" }];
+        const sales: any = [
+            { brand: { _id: "some-other-id" } },
+            { brand: { _id: "some-id" } }
+        ];
         return SalesDoNotRelyOnBrandRule("some-id").guard(sales)
             .then(() => Promise.reject("Expected failure"))
-            .catch(error => error.should.deep.equal(['"$[1].brand" was some-id but should not be some-id']));
+            .catch(error => error.should.deep.equal(['"$[1].brand._id" was some-id but should not be some-id']));
     });
 
     it("should succeed if sales are missing", () => {
@@ -39,8 +42,16 @@ describe("SalesDoNotRelyOnBrandRule", () => {
         return SalesDoNotRelyOnBrandRule("some-id").guard(sales);
     });
 
+    it("should succeed if individual sales are missing brand id", () => {
+        const sales: any = [{ brand: {} }];
+        return SalesDoNotRelyOnBrandRule("some-id").guard(sales);
+    });
+
     it("should succeed if individual sales do not have specified brand", () => {
-        const sales: any = [{ brand: "some-id-1" }, { brand: "some-id-2" }];
+        const sales: any = [
+            { brand: { _id: "some-id-1" } },
+            { brand: { _id: "some-id-2" } }
+        ];
         return SalesDoNotRelyOnBrandRule("some-id").guard(sales);
     });
 });
