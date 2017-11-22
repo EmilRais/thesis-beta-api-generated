@@ -1,1 +1,10 @@
-[]
+[{
+    "method": "POST",
+    "path": "/element/delete/brand/:id",
+    "operations": [
+        { "module": "mongo-lookup", "collection": "Sales" },
+        { "module": "validation", "schema": "sales-don't-rely-on-brand" },
+        { "module": "mongo-delete-one", "collection": "Brands" },
+        { "module": "response", "status": 200 }
+    ]
+}]
