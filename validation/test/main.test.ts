@@ -121,6 +121,62 @@ describe("operation", () => {
                 });
             });
     });
+
+    it("should reject with 400 if sales depend on type", () => {
+        const sales = [
+            { name: "some-name", types: [{ _id: "some-type" }] }
+        ];
+        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-type" };
+        return prepareOperation(abstractOperation)
+            .then(operation => {
+                return new Promise((resolve, reject) => {
+                    express()
+                        .use(updateBoards(sales))
+                        .use("/:id", operation)
+                        .use(success())
+                        .listen(3030, function() {
+                            const runningServer: Server = this;
+                            agent.post("localhost:3030/some-type")
+                                .catch(error => error.response)
+                                .then(response => {
+                                    runningServer.close();
+
+                                    response.status.should.equal(400);
+                                    response.text.should.equal("Type er i brug hos et udsalg og kan ikke slettes");
+                                    resolve();
+                                })
+                                .catch(reject);
+                        });
+                });
+            });
+    });
+
+    it("should continue to next operation if sales do not depend on type", () => {
+        const sales = [
+            { name: "some-name", types: [{ _id: "some-other-type" }] }
+        ];
+        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-type" };
+        return prepareOperation(abstractOperation)
+            .then(operation => {
+                return new Promise((resolve, reject) => {
+                    express()
+                        .use(updateBoards(sales))
+                        .use("/:id", operation)
+                        .use(success())
+                        .listen(3030, function() {
+                            const runningServer: Server = this;
+                            agent.post("localhost:3030/some-type")
+                                .catch(error => error.response)
+                                .then(response => {
+                                    runningServer.close();
+                                    response.status.should.equal(200);
+                                    resolve();
+                                })
+                                .catch(reject);
+                        });
+                });
+            });
+    });
 });
 
 const updateBoards: (boards: any) => RequestHandler = (boards) => {

@@ -3,13 +3,14 @@ import { Rule } from "paradise";
 
 import { SalesDoNotRelyOnBrandRule } from "./sales-do-not-rely-on-brand.rule";
 import { SalesDoNotRelyOnPaymentOptionRule } from "./sales-do-not-rely-on-payment-option.rule";
+import { SalesDoNotRelyOnTypeRule } from "./sales-do-not-rely-on-type.rule";
 
 export interface AbstractOperation {
     module: string;
     schema: Schema;
 }
 
-type Schema = "sales-don't-rely-on-brand" | "sales-don't-rely-on-payment-option";
+type Schema = "sales-don't-rely-on-brand" | "sales-don't-rely-on-payment-option" | "sales-don't-rely-on-type";
 
 function selectStrategy(schema: Schema): RequestHandler {
     return (request, response, next) => {
@@ -24,6 +25,11 @@ function selectStrategy(schema: Schema): RequestHandler {
                 return SalesDoNotRelyOnPaymentOptionRule(request.params.id).guard(response.locals.boards)
                     .then(() => next())
                     .catch(error => response.status(400).end("Betalingsmulighed er i brug hos et udsalg og kan ikke slettes"));
+
+            case "sales-don't-rely-on-type":
+                return SalesDoNotRelyOnTypeRule(request.params.id).guard(response.locals.boards)
+                    .then(() => next())
+                    .catch(error => response.status(400).end("Type er i brug hos et udsalg og kan ikke slettes"));
 
             default: throw new Error(`validation could not recognise schema "${schema}"`);
         }
