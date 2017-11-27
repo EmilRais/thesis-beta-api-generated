@@ -19,5 +19,16 @@
 	        { "module": "mongo-delete-one", "collection": "PaymentOptions", "error": "Kunne ikke slette betalingsmulighed" },
 	        { "module": "response", "status": 200 }
 	    ]
+	},
+	{
+	    "method": "POST",
+	    "path": "/element/delete/type/:id",
+	    "operations": [
+	        { "module": "mongo-lookup", "collection": "Sales" },
+	        { "module": "validation", "schema": "sales-don't-rely-on-type" },
+	        { "module": "mongo-update", "collection": "Sales", "query": "remove-type.json" },
+	        { "module": "mongo-delete-one", "collection": "Types", "error": "Kunne ikke slette type" },
+	        { "module": "response", "status": 200 }
+	    ]
 	}
 ]

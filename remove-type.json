@@ -1,0 +1,14 @@
+{
+    "selector": {
+        "types._id": {
+            "$in": ["request.params.id"]
+        }
+    },
+    "update": {
+        "$pull": {
+            "types": {
+                "_id": "request.params.id"
+            }
+        }
+    }
+}
