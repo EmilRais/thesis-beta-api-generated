@@ -21,7 +21,7 @@ describe("operation", () => {
     });
 
     it("should fail if collection has not been specified", () => {
-        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: null, host: "localhost" };
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: null, error: null, host: "localhost" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 (operation as any).database.close();
@@ -32,8 +32,20 @@ describe("operation", () => {
             });
     });
 
+    it("should fail if error has not been specified", () => {
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", error: null, host: "localhost" };
+        return prepareOperation(abstractOperation)
+            .then(operation => {
+                (operation as any).database.close();
+                return Promise.reject("Expected failure");
+            })
+            .catch(error => {
+                error.should.equal("mongo-delete-one expected an error message");
+            });
+    });
+
     it("should fail deleting document that does not exist", () => {
-        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", host: "localhost" };
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", error: "some-error-message", host: "localhost" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -48,7 +60,7 @@ describe("operation", () => {
                                     runningServer.close();
 
                                     response.status.should.equal(400);
-                                    response.text.should.equal("Kunne ikke slette brand");
+                                    response.text.should.equal("some-error-message");
                                     resolve();
                                 })
                                 .catch(reject);
@@ -58,7 +70,7 @@ describe("operation", () => {
     });
 
     it("should succeed deleting document that does exist", () => {
-        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", host: "localhost" };
+        const abstractOperation: AbstractOperation = { module: "mongo-delete-one", collection: "items", error: "some-error-message", host: "localhost" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
