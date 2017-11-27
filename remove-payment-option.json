@@ -1,0 +1,14 @@
+{
+    "selector": {
+        "paymentOptions._id": {
+            "$in": ["request.params.id"]
+        }
+    },
+    "update": {
+        "$pull": {
+            "paymentOptions": {
+                "_id": "request.params.id"
+            }
+        }
+    }
+}

@@ -1,10 +1,23 @@
-[{
-    "method": "POST",
-    "path": "/element/delete/brand/:id",
-    "operations": [
-        { "module": "mongo-lookup", "collection": "Sales" },
-        { "module": "validation", "schema": "sales-don't-rely-on-brand" },
-        { "module": "mongo-delete-one", "collection": "Brands" },
-        { "module": "response", "status": 200 }
-    ]
-}]
+[
+	{
+	    "method": "POST",
+	    "path": "/element/delete/brand/:id",
+	    "operations": [
+	        { "module": "mongo-lookup", "collection": "Sales" },
+	        { "module": "validation", "schema": "sales-don't-rely-on-brand" },
+	        { "module": "mongo-delete-one", "collection": "Brands", "error": "Kunne ikke slette brand" },
+	        { "module": "response", "status": 200 }
+	    ]
+	},
+	{
+	    "method": "POST",
+	    "path": "/element/delete/payment-option/:id",
+	    "operations": [
+	        { "module": "mongo-lookup", "collection": "Sales" },
+	        { "module": "validation", "schema": "sales-don't-rely-on-payment-option" },
+	        { "module": "mongo-update", "collection": "Sales", "query": "remove-payment-option.json" },
+	        { "module": "mongo-delete-one", "collection": "PaymentOptions", "error": "Kunne ikke slette betalingsmulighed" },
+	        { "module": "response", "status": 200 }
+	    ]
+	}
+]
