@@ -1,1 +1,1 @@
-docker build . -t emilrais/beta-api-generated
+docker build -t emilrais/beta-api-generated -f Dockerfile ..
