@@ -6,7 +6,7 @@ import * as express from "express";
 import { Server } from "http";
 import * as agent from "superagent";
 
-import { AbstractOperation, prepareOperation } from "../source/main";
+import { Operation, prepareOperation } from "../source/main";
 
 describe("operation", () => {
 
@@ -14,7 +14,7 @@ describe("operation", () => {
         const sales = [
             { name: "some-name", brand: { _id: "some-brand" } }
         ];
-        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-brand" };
+        const abstractOperation: Operation = { module: "validation", schema: "sales-don't-rely-on-brand" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -43,7 +43,7 @@ describe("operation", () => {
         const sales = [
             { name: "some-name", brand: { _id: "some-other-brand" } }
         ];
-        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-brand" };
+        const abstractOperation: Operation = { module: "validation", schema: "sales-don't-rely-on-brand" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -70,7 +70,7 @@ describe("operation", () => {
         const sales = [
             { name: "some-name", paymentOptions: [{ _id: "some-payment-option" }] }
         ];
-        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-payment-option" };
+        const abstractOperation: Operation = { module: "validation", schema: "sales-don't-rely-on-payment-option" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -99,7 +99,7 @@ describe("operation", () => {
         const sales = [
             { name: "some-name", paymentOptions: [{ _id: "some-other-payment-option" }] }
         ];
-        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-payment-option" };
+        const abstractOperation: Operation = { module: "validation", schema: "sales-don't-rely-on-payment-option" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -126,7 +126,7 @@ describe("operation", () => {
         const sales = [
             { name: "some-name", types: [{ _id: "some-type" }] }
         ];
-        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-type" };
+        const abstractOperation: Operation = { module: "validation", schema: "sales-don't-rely-on-type" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
@@ -155,7 +155,7 @@ describe("operation", () => {
         const sales = [
             { name: "some-name", types: [{ _id: "some-other-type" }] }
         ];
-        const abstractOperation: AbstractOperation = { module: "validation", schema: "sales-don't-rely-on-type" };
+        const abstractOperation: Operation = { module: "validation", schema: "sales-don't-rely-on-type" };
         return prepareOperation(abstractOperation)
             .then(operation => {
                 return new Promise((resolve, reject) => {
