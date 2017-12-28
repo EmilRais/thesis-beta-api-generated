@@ -5,8 +5,8 @@
 	    "operations": [
 	        { "module": "../modules/mongo-lookup", "collection": "Sales" },
 	        { "module": "validation", "schema": "sales-don't-rely-on-brand" },
-	        { "module": "../modules/mongo-delete-one", "collection": "Brands", "error": "Kunne ikke slette brand" },
-	        { "module": "../modules/response", "status": 200 }
+	        { "module": "../modules/mongo-delete-one", "collection": "Brands", "query": "delete-by-id.json", "error": 400, "errorMessage": "Kunne ikke slette brand" },
+	        { "module": "../modules/response", "status": 200, "body": null }
 	    ]
 	},
 	{
@@ -15,9 +15,9 @@
 	    "operations": [
 	        { "module": "../modules/mongo-lookup", "collection": "Sales" },
 	        { "module": "validation", "schema": "sales-don't-rely-on-payment-option" },
-	        { "module": "../modules/mongo-update-one", "collection": "Sales", "query": "remove-payment-option.json" },
-	        { "module": "../modules/mongo-delete-one", "collection": "PaymentOptions", "error": "Kunne ikke slette betalingsmulighed" },
-	        { "module": "../modules/response", "status": 200 }
+	        { "module": "../modules/mongo-update", "collection": "Sales", "query": "remove-payment-option.json" },
+	        { "module": "../modules/mongo-delete-one", "collection": "PaymentOptions", "query": "delete-by-id.json", "error": 400, "errorMessage": "Kunne ikke slette betalingsmulighed" },
+	        { "module": "../modules/response", "status": 200, "body": null }
 	    ]
 	},
 	{
@@ -26,9 +26,9 @@
 	    "operations": [
 	        { "module": "../modules/mongo-lookup", "collection": "Sales" },
 	        { "module": "validation", "schema": "sales-don't-rely-on-type" },
-	        { "module": "../modules/mongo-update-one", "collection": "Sales", "query": "remove-type.json" },
-	        { "module": "../modules/mongo-delete-one", "collection": "Types", "error": "Kunne ikke slette type" },
-	        { "module": "../modules/response", "status": 200 }
+	        { "module": "../modules/mongo-update", "collection": "Sales", "query": "remove-type.json" },
+	        { "module": "../modules/mongo-delete-one", "collection": "Types", "query": "delete-by-id.json", "error": 400, "errorMessage": "Kunne ikke slette type" },
+	        { "module": "../modules/response", "status": 200, "body": null }
 	    ]
 	}
 ]
