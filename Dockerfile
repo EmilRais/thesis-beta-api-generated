@@ -1,4 +1,4 @@
-FROM emilrais/speciale-tool
+FROM emilrais/thesis-loom
 
 COPY modules /modules
 COPY beta-api-generated/validation /api/validation
